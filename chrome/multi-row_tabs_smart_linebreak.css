@@ -1,5 +1,5 @@
 :root {
-  /*Changing the following variable to a lower value would escalate the number of rules required to make this work.
+  /*Changing the following variable to a lower value might escalate the number of rules required to make this work.
   With 100px it will work up to a screen width of 4k.*/
   --multirow-tab-min-width: 100px !important;
   --tbbtw: calc(2 * (var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding)) + 16px);
