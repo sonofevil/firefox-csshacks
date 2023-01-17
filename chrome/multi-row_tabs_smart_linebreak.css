@@ -7,7 +7,7 @@
   --mptw: calc(max(calc(36px + var(--tab-overflow-pinned-tabs-width)), 36px) - 36px);
 }
 
-/* If Firefox' browser.css supported counter(reversed()), the following section could 
+/* If Firefox' browser.css supported reset-counter(reversed()), the following section could 
 be much shorter. As of now there seems to be no way to assign these variables dynamically. */
 
 #tabbrowser-tabs { --nlot: 0; }
