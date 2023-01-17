@@ -7,7 +7,7 @@ run out of space in the first row (this is the more useful the more pinned tabs 
 
 However, if we keep them together even when they no longer fit the second row, the advantage is
 lost because dragging is broken anyway. In that case they would expand the tabbrowser to a third
-line even when with just multi-row_tabs.css, only 2 lines would be needed because there is free
+row even when with just multi-row_tabs.css, only 2 lines would be needed because there is free
 real estate in the first line. Hence this stylesheet uses convoluted math to allow unpinned tabs
 back in the first line when they no longer fit a single line.
 
