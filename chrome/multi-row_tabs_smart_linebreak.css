@@ -1,3 +1,12 @@
+:root {
+  /*Changing this to a lower value would escalate the number of rules required to make this work.
+  With 100px it will work up to a screen width of 4k.*/
+  --multirow-tab-min-width: 100px !important;
+  --tbbtw: calc(2 * (var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding)) + 16px);
+  --mrtmw: var(--multirow-tab-min-width);
+  --mptw: calc(max(calc(36px + var(--tab-overflow-pinned-tabs-width)), 36px) - 36px);
+}
+
 #tabbrowser-tabs {
   --nlot: 0;
 }
