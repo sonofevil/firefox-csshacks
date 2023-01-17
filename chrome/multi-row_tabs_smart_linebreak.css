@@ -1,5 +1,5 @@
 :root {
-  /*Changing this to a lower value would escalate the number of rules required to make this work.
+  /*Changing the following variable to a lower value would escalate the number of rules required to make this work.
   With 100px it will work up to a screen width of 4k.*/
   --multirow-tab-min-width: 100px !important;
   --tbbtw: calc(2 * (var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding)) + 16px);
@@ -7,9 +7,10 @@
   --mptw: calc(max(calc(36px + var(--tab-overflow-pinned-tabs-width)), 36px) - 36px);
 }
 
-#tabbrowser-tabs {
-  --nlot: 0;
-}
+/* If Firefox' browser.css supported counter(reversed()), the following section could 
+be much shorter. As of now there seems to be no way to assign these variables dynamically. */
+
+#tabbrowser-tabs { --nlot: 0; }
 
 tab:nth-last-of-type( 1){--nlot: 1;} tab:nth-last-of-type( 2){--nlot: 2;}
 tab:nth-last-of-type( 3){--nlot: 3;} tab:nth-last-of-type( 4){--nlot: 4;}
@@ -28,10 +29,16 @@ tab:nth-last-of-type(27){--nlot:27;} tab:nth-last-of-type(28){--nlot:28;}
 tab:nth-last-of-type(29){--nlot:29;} tab:nth-last-of-type(30){--nlot:30;}
 
 [first-visible-unpinned-tab="true"]     { 
+  /* This creates a right margin for the first unpinned tab equal to the 
+  minimum width of all other unpinned tabs and the new tab button combined,
+  but disables the margin when all unpinned tabs no longer fit one row. */
   --tw: calc(var(--nlot) * var(--mrtmw) + var(--tbbtw));
   margin-right: calc(var(--tw) - max((min(((var(--tw) - 100%) * 9999), 100%)), 0px)) !important; 
 }
 [first-visible-unpinned-tab="true"] + * { 
+  /* This creates a corresponding negative margin for the second unpinned
+  tab. The result is that all unpinned tabs break to the next line as a
+  group, but only if they all fit one row. */
   --tw: calc((var(--nlot) + 1) * var(--mrtmw) + var(--tbbtw));
   margin-left:  calc(0px - (var(--tw) - max((min(((var(--tw) - 100%) * 9999), 100%)), 0px))) !important; 
 }
