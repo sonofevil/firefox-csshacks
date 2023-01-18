@@ -1,3 +1,13 @@
+/* Temporary fix. Must be made unnecessary. */
+.tabbrowser-tab[first-visible-unpinned-tab] {
+    margin-left: unset !important;
+}
+
+#tabs-newtab-button {
+  display: unset !important;
+  appearance: unset !important;
+}
+
 #tabbrowser-tabs { 
   /* Changing the following variable to a lower value would escalate the number of rules required 
   to make this work on ultrawide devices. With 100px it will work up to a screen width of 4k.*/
