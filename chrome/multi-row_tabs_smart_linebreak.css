@@ -1,4 +1,4 @@
-/*line-break all unpinned tabs together*/
+/*Line-break all unpinned tabs together to keep drag & drop working.*/
 
 #tabbrowser-tabs {
     --unp-tab-mw: var(--multirow-tab-min-width);
@@ -6,8 +6,19 @@
     --maxwidth: calc(100vw - var(--unp-tab-mw));
 }
 
-/* If Firefox' browser.css supported reset-counter(reversed()), the following section could 
-be much shorter. As of now there seems to be no way to assign these variables dynamically. */
+/*This method would be much more efficient, but unfortunately counter() returns a string, not an integer.
+See: 
+https://github.com/w3c/csswg-drafts/issues/1026
+https://github.com/w3c/csswg-drafts/issues/4559
+
+#tabbrowser-tabs {
+  counter-reset: reversed(my-counter) -1;
+}
+
+.tabbrowser-tab, #tabs-newtab-button {
+  counter-increment: my-counter -1;
+  --n-last-tab: counter(my-counter);
+}*/
 
 #tabs-newtab-button {
   /*Forgot what this does.*/
@@ -31,19 +42,22 @@ tab:nth-last-of-type(25){--n-last-tab:25;} tab:nth-last-of-type(26){--n-last-tab
 tab:nth-last-of-type(27){--n-last-tab:27;} tab:nth-last-of-type(28){--n-last-tab:28;}
 tab:nth-last-of-type(29){--n-last-tab:29;} tab:nth-last-of-type(30){--n-last-tab:30;}
 
-.tabbrowser-tab:[first-visible-unpinned-tab="true"]     {
+.tabbrowser-tab[first-visible-unpinned-tab="true"]     {
     --neighbors: calc(var(--n-last-tab) - 1);
     margin-right: var(--reset) !important;
 }
 
-.tabbrowser-tab:[first-visible-unpinned-tab="true"] + * {
+.tabbrowser-tab[first-visible-unpinned-tab="true"] + * {
     --neighbors: var(--n-last-tab);
     margin-left: calc(0px - var(--reset)) !important;
 }
 
-.tabbrowser-tab:[first-visible-unpinned-tab="true"], .tabbrowser-tab:[first-visible-unpinned-tab="true"] + * {
+.tabbrowser-tab[first-visible-unpinned-tab="true"], .tabbrowser-tab[first-visible-unpinned-tab="true"] + * {
     --linebreaker: calc(var(--neighbors) * var(--unp-tab-mw) + var(--new-tab-bw));
     --reset: clamp(0px, calc((var(--maxwidth) - var(--linebreaker)) * 100), var(--linebreaker));
-    /*Fixes animation delay glitch.*/
-    transition: margin-inline-start 0.0s var(--animation-easing-function) !important;
+}
+
+/*Fixes margin animation delay glitch.*/
+.tabbrowser-tab[first-visible-unpinned-tab="true"]:not([fake][fake]#fakeID#fakeID), .tabbrowser-tab[first-visible-unpinned-tab="true"] + *:not([fake][fake]#fakeID#fakeID) {
+    transition: margin-inline-start 0.0s !important;
 }
