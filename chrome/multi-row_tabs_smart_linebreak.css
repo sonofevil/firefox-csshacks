@@ -1,0 +1,52 @@
+/* Temporary fix. Must be made unnecessary. */
+.tabbrowser-tab[first-visible-unpinned-tab] {
+    margin-left: unset !important;
+}
+
+#tabs-newtab-button {
+  display: unset !important;
+  appearance: unset !important;
+}
+
+#tabbrowser-tabs { 
+  /* Changing the following variable to a lower value would escalate the number of rules required 
+  to make this work on ultrawide devices. With 100px it will work up to a screen width of 4k.*/
+  --multirow-tab-min-width: 100px !important;
+  --new-tab-bw: calc(2 * (var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding)) + 16px);
+  --unp-tab-mw: var(--multirow-tab-min-width);
+  --n-last-tab: 0; 
+}
+
+/* If Firefox' browser.css supported reset-counter(reversed()), the following section could 
+be much shorter. As of now there seems to be no way to assign these variables dynamically. */
+
+tab:nth-last-of-type( 1){--n-last-tab: 1;} tab:nth-last-of-type( 2){--n-last-tab: 2;}
+tab:nth-last-of-type( 3){--n-last-tab: 3;} tab:nth-last-of-type( 4){--n-last-tab: 4;}
+tab:nth-last-of-type( 5){--n-last-tab: 5;} tab:nth-last-of-type( 6){--n-last-tab: 6;}
+tab:nth-last-of-type( 7){--n-last-tab: 7;} tab:nth-last-of-type( 8){--n-last-tab: 8;}
+tab:nth-last-of-type( 9){--n-last-tab: 9;} tab:nth-last-of-type(10){--n-last-tab:10;}
+tab:nth-last-of-type(11){--n-last-tab:11;} tab:nth-last-of-type(12){--n-last-tab:12;}
+tab:nth-last-of-type(13){--n-last-tab:13;} tab:nth-last-of-type(14){--n-last-tab:14;}
+tab:nth-last-of-type(15){--n-last-tab:15;} tab:nth-last-of-type(16){--n-last-tab:16;}
+tab:nth-last-of-type(17){--n-last-tab:17;} tab:nth-last-of-type(18){--n-last-tab:18;}
+tab:nth-last-of-type(19){--n-last-tab:19;} tab:nth-last-of-type(20){--n-last-tab:20;}
+tab:nth-last-of-type(21){--n-last-tab:21;} tab:nth-last-of-type(22){--n-last-tab:22;}
+tab:nth-last-of-type(23){--n-last-tab:23;} tab:nth-last-of-type(24){--n-last-tab:24;}
+tab:nth-last-of-type(25){--n-last-tab:25;} tab:nth-last-of-type(26){--n-last-tab:26;}
+tab:nth-last-of-type(27){--n-last-tab:27;} tab:nth-last-of-type(28){--n-last-tab:28;}
+tab:nth-last-of-type(29){--n-last-tab:29;} tab:nth-last-of-type(30){--n-last-tab:30;}
+
+[first-visible-unpinned-tab="true"]     { 
+  /* This creates a right margin for the first unpinned tab equal to the 
+  minimum width of all other unpinned tabs and the new tab button combined,
+  but disables the margin when all unpinned tabs no longer fit one row. */
+  --tw: calc((var(--n-last-tab) - 1) * var(--unp-tab-mw) + var(--new-tab-bw));
+  margin-right: calc(       var(--tw) - max((min(((var(--tw) - 100%) * 9999), 100%)), 0px)) !important; 
+}
+[first-visible-unpinned-tab="true"] + * { 
+  /* This creates a corresponding negative margin for the second unpinned
+  tab. The result is that all unpinned tabs break to the next line as a
+  group, but only if they all actually fit one row. */
+  --tw: calc( var(--n-last-tab)      * var(--unp-tab-mw) + var(--new-tab-bw));
+  margin-left:  calc(0px - (var(--tw) - max((min(((var(--tw) - 100%) * 9999), 100%)), 0px)))!important;
+}
