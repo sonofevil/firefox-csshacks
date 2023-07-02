@@ -1,24 +1,19 @@
-/* Temporary fix. Must be made unnecessary. */
-.tabbrowser-tab[first-visible-unpinned-tab] {
-    margin-left: unset !important;
-}
+/*line-break all unpinned tabs together*/
 
-#tabs-newtab-button {
-  display: unset !important;
-  appearance: unset !important;
-}
-
-#tabbrowser-tabs { 
-  /* Changing the following variable to a lower value would escalate the number of rules required 
-  to make this work on ultrawide devices. With 100px it will work up to a screen width of 4k.*/
-  --multirow-tab-min-width: 100px !important;
-  --new-tab-bw: calc(2 * (var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding)) + 16px);
-  --unp-tab-mw: var(--multirow-tab-min-width);
-  --n-last-tab: 0; 
+#tabbrowser-tabs {
+    --unp-tab-mw: var(--multirow-tab-min-width);
+    --new-tab-bw: calc(2 * 3px + 2 * var(--toolbarbutton-inner-padding) + 16px);
+    --maxwidth: calc(100vw - var(--unp-tab-mw));
 }
 
 /* If Firefox' browser.css supported reset-counter(reversed()), the following section could 
 be much shorter. As of now there seems to be no way to assign these variables dynamically. */
+
+#tabs-newtab-button {
+  /*Forgot what this does.*/
+  display: unset !important;
+  --n-last-tab: 0; 
+}
 
 tab:nth-last-of-type( 1){--n-last-tab: 1;} tab:nth-last-of-type( 2){--n-last-tab: 2;}
 tab:nth-last-of-type( 3){--n-last-tab: 3;} tab:nth-last-of-type( 4){--n-last-tab: 4;}
@@ -36,17 +31,19 @@ tab:nth-last-of-type(25){--n-last-tab:25;} tab:nth-last-of-type(26){--n-last-tab
 tab:nth-last-of-type(27){--n-last-tab:27;} tab:nth-last-of-type(28){--n-last-tab:28;}
 tab:nth-last-of-type(29){--n-last-tab:29;} tab:nth-last-of-type(30){--n-last-tab:30;}
 
-[first-visible-unpinned-tab="true"]     { 
-  /* This creates a right margin for the first unpinned tab equal to the 
-  minimum width of all other unpinned tabs and the new tab button combined,
-  but disables the margin when all unpinned tabs no longer fit one row. */
-  --tw: calc((var(--n-last-tab) - 1) * var(--unp-tab-mw) + var(--new-tab-bw));
-  margin-right: calc(       var(--tw) - max((min(((var(--tw) - 100%) * 9999), 100%)), 0px)) !important; 
+.tabbrowser-tab:[first-visible-unpinned-tab="true"]     {
+    --neighbors: calc(var(--n-last-tab) - 1);
+    margin-right: var(--reset) !important;
 }
-[first-visible-unpinned-tab="true"] + * { 
-  /* This creates a corresponding negative margin for the second unpinned
-  tab. The result is that all unpinned tabs break to the next line as a
-  group, but only if they all actually fit one row. */
-  --tw: calc( var(--n-last-tab)      * var(--unp-tab-mw) + var(--new-tab-bw));
-  margin-left:  calc(0px - (var(--tw) - max((min(((var(--tw) - 100%) * 9999), 100%)), 0px)))!important;
+
+.tabbrowser-tab:[first-visible-unpinned-tab="true"] + * {
+    --neighbors: var(--n-last-tab);
+    margin-left: calc(0px - var(--reset)) !important;
+}
+
+.tabbrowser-tab:[first-visible-unpinned-tab="true"], .tabbrowser-tab:[first-visible-unpinned-tab="true"] + * {
+    --linebreaker: calc(var(--neighbors) * var(--unp-tab-mw) + var(--new-tab-bw));
+    --reset: clamp(0px, calc((var(--maxwidth) - var(--linebreaker)) * 100), var(--linebreaker));
+    /*Fixes animation delay glitch.*/
+    transition: margin-inline-start 0.0s var(--animation-easing-function) !important;
 }
