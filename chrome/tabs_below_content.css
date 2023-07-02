@@ -10,9 +10,6 @@ Additionally on Linux, you may need to get:
 linux_gtk_window_control_patch.css
 */
 
-/* Dummy variable to support versions 94-96, can be removed when 96 lands */
-:root{ --lwt-frame: var(--lwt-accent-color) }
-
 .titlebar-buttonbox-container{
   position: fixed;
   display: block;
@@ -21,6 +18,14 @@ linux_gtk_window_control_patch.css
   height: 40px;
   z-index: 3;
   visibility: visible !important;
+}
+
+@media (-moz-gtk-csd-reversed-placement),
+       (-moz-platform: macos){
+  .titlebar-buttonbox-container{ left:0; right: unset !important; }
+}
+@supports -moz-bool-pref("userchrome.force-window-controls-on-left.enabled"){
+  .titlebar-buttonbox-container{ left:0; right: unset !important; }
 }
 
 :root[inFullscreen] #navigator-toolbox:not(:hover) .titlebar-buttonbox-container{ display: none !important; }
@@ -33,14 +38,20 @@ linux_gtk_window_control_patch.css
 :root[tabsintitlebar="true"]:not([inFullscreen]) #toolbar-menubar[autohide="false"] .titlebar-buttonbox-container{ height: 100%; }
 :root[tabsintitlebar="true"]:not([inFullscreen]) #toolbar-menubar[autohide="false"] .titlebar-button{ padding: 2px 17px !important; }
 
-@media  (-moz-platform: windows),
-        (-moz-os-version: windows-win7),
-        (-moz-os-version: windows-win10){
+@media  (-moz-platform: windows){
   #titlebar{ -moz-appearance: none !important; }
 }
 /* Move tabs below content */
-:root:not([inDOMFullscreen]) #browser-bottombox{ margin-bottom: calc(var(--tab-min-height) + 2 * var(--tab-block-margin,0px)) }
-:root[inFullscreen]:not([inDOMFullscreen]) #browser-bottombox{ margin-bottom: 1px; }
+#main-window > body::after{
+  content: "";
+  display: flex;
+}
+#main-window:not([inFullscreen]) > body::after{
+  margin-bottom: calc(var(--tab-min-height) + 2 * var(--tab-block-margin,0px));
+}
+#main-window[inFullscreen]:not([inDOMFullscreen]) > body::after{
+  margin-bottom: 1px;
+}
 
 #TabsToolbar{
   position: fixed;
@@ -52,7 +63,7 @@ linux_gtk_window_control_patch.css
 }
 #TabsToolbar:hover{ z-index: 1 }
 
-#TabsToolbar{ background-color: var(--lwt-frame); }
+#TabsToolbar{ background-color: var(--lwt-accent-color); }
 #TabsToolbar-customization-target{ width: 100vw; }
 
 .tab-background{ border-top-style: none !important; }
